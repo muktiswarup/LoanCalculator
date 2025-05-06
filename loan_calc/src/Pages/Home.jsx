@@ -1,6 +1,20 @@
-import React, { useState } from 'react';
-import { Typography, TextField, Button, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, MenuItem, Select } from '@mui/material';
-import { useEmiCalculator } from '../Hook/UseEmiCalculator';
+import React, { useState } from "react";
+import {
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { useEmiCalculator } from "../Hook/UseEmiCalculator";
 
 const Home = () => {
   const [loanAmount, setLoanAmount] = useState(10000);
@@ -8,7 +22,7 @@ const Home = () => {
   const [term, setTerm] = useState(5);
   const [emi, setEmi] = useState(0);
   const [schedule, setSchedule] = useState([]);
-  const [currency, setCurrency] = useState('INR');
+  const [currency, setCurrency] = useState("INR");
 
   const handleCalculate = () => {
     const emiValue = useEmiCalculator(loanAmount, interestRate, term * 12); // Convert years to months
@@ -27,7 +41,7 @@ const Home = () => {
         month,
         principal: principal.toFixed(2),
         interest: interest.toFixed(2),
-        balance: balance > 0 ? balance.toFixed(2) : '0.00',
+        balance: balance > 0 ? balance.toFixed(2) : "0.00",
       });
     }
     setSchedule(scheduleData);
@@ -39,117 +53,102 @@ const Home = () => {
     setTerm(5);
     setEmi(0);
     setSchedule([]);
-    setCurrency('INR');
+    setCurrency("INR");
   };
 
   return (
-    <div>
-      <Typography 
-        variant="h4" 
-        style={{ marginLeft: "100px", marginTop: "20px", opacity: 0.9 }}
-      >
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" sx={{ mb: 2, opacity: 0.9 }}>
         Loan Calculator Dashboard
       </Typography>
-      
-      <Box marginLeft="100px" marginTop="20px">
-        <Box
-          component="form"
-          sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-            id="loan-amount"
-            label="Loan Amount"
-            type="number"
-            value={loanAmount}
-            onChange={(e) => setLoanAmount(Number(e.target.value))}
-          />
-          <TextField
-            id="interest-rate"
-            label="Interest Rate (%)"
-            type="number"
-            value={interestRate}
-            onChange={(e) => setInterestRate(Number(e.target.value))}
-          />
-          <TextField
-            id="term"
-            label="Term (Years)"
-            type="number"
-            value={term}
-            onChange={(e) => setTerm(Number(e.target.value))}
-          />
-        </Box>
-        <Button 
-          variant="contained" 
-          color="primary"
-          onClick={handleCalculate}
-        >
-          Calculate
-        </Button>
-        <Button 
-          variant="outlined" 
-          color="secondary"
-          onClick={handleReset}
-          style={{ marginLeft: '10px' }}
-        >
-          Reset
-        </Button>
-        {emi > 0 && (
-          <>
-            <Box marginTop="20px">
-              <Typography 
-                variant="h6" 
-                style={{ opacity: 0.9 }}
-              >
-                Monthly EMI: {currency} {emi.toFixed(2)}
-              </Typography>
-              <Select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                style={{ marginLeft: '10px' }}
-              >
-                <MenuItem value="INR">INR</MenuItem>
-                <MenuItem value="USD">USD</MenuItem>
-                <MenuItem value="EUR">EUR</MenuItem>
-                <MenuItem value="GBP">GBP</MenuItem>
-                <MenuItem value="JPY">JPY</MenuItem>
-                <MenuItem value="AUD">AUD</MenuItem>
-                <MenuItem value="CAD">CAD</MenuItem>
-              </Select>
-            </Box>
-            <Typography 
-              variant="h6" 
-              style={{ marginTop: "20px", opacity: 0.9 }}
-            >
-              Amortization Schedule
-            </Typography>
-            <TableContainer component={Paper} style={{ marginTop: '20px' }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Month</TableCell>
-                    <TableCell>Principal ({currency})</TableCell>
-                    <TableCell>Interest ({currency})</TableCell>
-                    <TableCell>Remaining Balance ({currency})</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {schedule.map((row) => (
-                    <TableRow key={row.month}>
-                      <TableCell>{row.month}</TableCell>
-                      <TableCell>{row.principal}</TableCell>
-                      <TableCell>{row.interest}</TableCell>
-                      <TableCell>{row.balance}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </>
-        )}
+
+      <Box
+        component="form"
+        sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="loan-amount"
+          label="Loan Amount"
+          type="number"
+          value={loanAmount}
+          onChange={(e) => setLoanAmount(Number(e.target.value))}
+        />
+        <TextField
+          id="interest-rate"
+          label="Interest Rate (%)"
+          type="number"
+          value={interestRate}
+          onChange={(e) => setInterestRate(Number(e.target.value))}
+        />
+        <TextField
+          id="term"
+          label="Term (Years)"
+          type="number"
+          value={term}
+          onChange={(e) => setTerm(Number(e.target.value))}
+        />
       </Box>
-    </div>
+      <Button variant="contained" color="primary" onClick={handleCalculate}>
+        Calculate
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={handleReset}
+        sx={{ ml: 1 }}
+      >
+        Reset
+      </Button>
+{emi > 0 && (
+        <>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="h6" sx={{ opacity: 0.9 }}>
+              Monthly EMI: {currency} {emi.toFixed(2)}
+            </Typography>
+            <Select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              sx={{ ml: 1 }}
+            >
+              <MenuItem value="INR">INR</MenuItem>
+              <MenuItem value="USD">USD</MenuItem>
+              <MenuItem value="EUR">EUR</MenuItem>
+              <MenuItem value="GBP">GBP</MenuItem>
+              <MenuItem value="JPY">JPY</MenuItem>
+              <MenuItem value="AUD">AUD</MenuItem>
+              <MenuItem value="CAD">CAD</MenuItem>
+            </Select>
+          </Box>
+          <Typography variant="h6" sx={{ mt: 2, opacity: 0.9 }}>
+            Amortization Schedule
+          </Typography>
+          <TableContainer component={Paper} sx={{ mt: 2 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Month</TableCell>
+                  <TableCell>Principal ({currency})</TableCell>
+                  <TableCell>Interest ({currency})</TableCell>
+                  <TableCell>Remaining Balance ({currency})</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {schedule.map((row) => (
+                  <TableRow key={row.month}>
+                    <TableCell>{row.month}</TableCell>
+                    <TableCell>{row.principal}</TableCell>
+                    <TableCell>{row.interest}</TableCell>
+                    <TableCell>{row.balance}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
+    </Box>
   );
 };
 
