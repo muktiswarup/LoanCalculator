@@ -9,11 +9,13 @@ import {
   TableRow,
   Paper,
   Typography,
+  Pagination,
 } from '@mui/material';
 
 const ExchangeRate = () => {
   const [rate, setRate] = useState(null);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,6 +33,17 @@ const ExchangeRate = () => {
     fetchData();
   }, []);
 
+  const pageLimit = 10;
+  const totalPages = rate ? Math.ceil(Object.keys(rate).length / pageLimit) : 0;
+  const startIndex = (page - 1) * pageLimit;
+  const selectedPage = rate
+    ? Object.entries(rate).slice(startIndex, startIndex + pageLimit)
+    : [];
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <Typography variant="h5" gutterBottom>
@@ -44,24 +57,32 @@ const ExchangeRate = () => {
       {!rate ? (
         <Typography>Loading...</Typography>
       ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Currency</TableCell>
-                <TableCell align="right">Rate</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.entries(rate).map(([currency, value]) => (
-                <TableRow key={currency}>
-                  <TableCell>{currency}</TableCell>
-                  <TableCell align="right">{value}</TableCell>
+        <>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Currency</TableCell>
+                  <TableCell align="right">Rate</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {selectedPage.map(([currency, value]) => (
+                  <TableRow key={currency}>
+                    <TableCell>{currency}</TableCell>
+                    <TableCell align="right">{value}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={handlePageChange}
+            style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+          />
+        </>
       )}
     </div>
   );
